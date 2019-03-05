@@ -17,7 +17,6 @@ y = dataset.iloc[:, 13].values
 # Encoding categorical data
 # Encoding the Independent Variables
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-
 #fit_transform centers the data by standard deviation
 
 #Country
@@ -34,6 +33,7 @@ X = onehotencoder.fit_transform(X).toarray()
 X = X[:, 1:]
 
 # Splitting the dataset into the Training set and Test set
+# Only puts 20% of tain data in test data
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
 
@@ -73,3 +73,15 @@ classifier.compile(optimizer = 'adam', loss= 'binary_crossentropy',metrics = ['a
 #Fitting the ANN to the Training set
 #Batch Size: the number of samples processed before the model is updated. 
 classifier.fit(X_train, y_train, batch_size=10, nb_epoch=100)
+
+
+#Part 3 - Making the predictions and evaluating the model
+#Predicting the Test set result
+y_pred = classifier.predict(X_test)
+y_pred = (y_pred > 0.5)
+
+
+#Making the confusion matrix
+#A confusion matrix is a table that is often used to describe the performance of a classification model (or "classifier") on a set of test data for which the true values are known. The confusion matrix itself is relatively simple to understand, but the related terminology can be confusing.
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
