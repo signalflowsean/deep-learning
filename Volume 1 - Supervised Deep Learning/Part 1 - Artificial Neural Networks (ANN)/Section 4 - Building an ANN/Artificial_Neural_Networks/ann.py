@@ -48,6 +48,7 @@ X_test = sc.transform(X_test)
 import keras 
 from keras.models import Sequential
 from keras.layers import Dense
+from keras.layers import Dropout
 
 #Initialize the ANN
 #Sequential model is a linear stack of layers
@@ -56,11 +57,14 @@ classifier = Sequential()
 #Relu is the rectifier function
 #using the rectifier function we will use for the hidden layer
 
-#Adding the input layer and the first hidden layer
+#Adding the input layer and the first hidden layer with dropout
 classifier.add(Dense(output_dim = 6, init='uniform', activation='relu', input_dim = 11))
+#first try with 0.1 as p value, if it is still overfit increase by 0.2
+classifier.add(Dropout(p = 0.1))
 
 #Adding the second hidden layer - already made the first input layer (don't need input_dim param)
 classifier.add(Dense(output_dim = 6, init='uniform', activation='relu'))
+classifier.add(Dropout(p = 0.1))
 
 #Adding the output layer
 classifier.add(Dense(output_dim = 1, init='uniform', activation='sigmoid'))
@@ -74,7 +78,6 @@ classifier.compile(optimizer = 'adam', loss= 'binary_crossentropy',metrics = ['a
 #Batch Size: the number of samples processed before the model is updated. 
 classifier.fit(X_train, y_train, batch_size=10, nb_epoch=100)
 
-
 #Part 3 - Making the predictions and evaluating the model
 #Predicting the Test set result
 y_pred = classifier.predict(X_test)
@@ -85,3 +88,59 @@ y_pred = (y_pred > 0.5)
 #A confusion matrix is a table that is often used to describe the performance of a classification model (or "classifier") on a set of test data for which the true values are known. The confusion matrix itself is relatively simple to understand, but the related terminology can be confusing.
 from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(y_test, y_pred)
+
+#Part 4 - Evaluating, Improving and Tuning the ANN
+
+#Evaluating the ANN
+#Cross validation
+from keras.wrappers.scikit_learn import KerasClassifier
+from sklearn.model_selection import cross_val_score
+from keras.models import Sequential
+from keras.layers import Dense
+
+def build_classifier(): 
+    classifier = Sequential() 
+    classifier.add(Dense(output_dim = 6, init='uniform', activation='relu', input_dim = 11))
+    classifier.add(Dense(output_dim = 6, init='uniform', activation='relu'))
+    classifier.add(Dense(output_dim = 1, init='uniform', activation='sigmoid'))
+    classifier.compile(optimizer = 'adam', loss= 'binary_crossentropy',metrics = ['accuracy'])
+    return classifier
+classifier = KerasClassifier(build_fn = build_classifier, batch_size = 10, nb_epoch = 100)
+accuracies = cross_val_score(estimator = classifier, X = X_train, y= y_train, cv = 10)
+mean = accuracies.mean()
+variance = accuracies.std()
+        
+#Improving the ANN
+#Dropout regularization to reduce overfitting
+
+#Tuning the ANN
+#Hyperparamaters: batch-size, epoch, num layers, num neurons
+#Uses grid search to find hyperparamaters
+from keras.wrappers.scikit_learn import KerasClassifier
+from sklearn.model_selection import GridSearchCV
+from keras.models import Sequential
+from keras.layers import Dense
+
+def build_classifier(optimizer): 
+    classifier = Sequential() 
+    classifier.add(Dense(output_dim = 6, init='uniform', activation='relu', input_dim = 11))
+    classifier.add(Dense(output_dim = 6, init='uniform', activation='relu'))
+    classifier.add(Dense(output_dim = 1, init='uniform', activation='sigmoid'))
+    classifier.compile(optimizer = optimizer, loss= 'binary_crossentropy',metrics = ['accuracy'])
+    return classifier
+classifier = KerasClassifier(build_fn = build_classifier)
+#common practice to take powers of two for batch_size
+paramaters = {'batch_size': [25, 32], 
+              'nb_epoch':[100, 500], 
+              'optimizer': ['adam', 'rmsprop']}
+
+grid_search = GridSearchCV(estimator = classifier, 
+                           param_grid = paramaters, 
+                           scoring = 'accuracy', 
+                           cv = 10)
+
+grid_search.fit(X_train, y_train)
+best_parameters =  grid_search.best_params_
+best_accuracy = grid_search.best_score_
+
+
