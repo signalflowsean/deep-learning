@@ -16,3 +16,10 @@ from keras.layers import Dense
 # Initializing the CNN
 classifier = Sequential()
 
+# Step 1 - Convolution
+# Image is a matrix of pixels
+# Feature Detector is a 3X3 Matrix of pixels
+# When the two are multipled a Feature Map is outputted
+# We do this with many feature detectors
+classifier.add(Convolution2D(32, (3, 3), input_shape = (64, 64, 3), activation = 'relu'))
+
