@@ -28,6 +28,9 @@ classifier.add(Convolution2D(32, (3, 3), input_shape = (64, 64, 3), activation =
 # reduces time complexity but keeps spatial structure
 classifier.add(MaxPooling2D(pool_size=(2, 2)))
 
+# Adding a second convolutional layer
+classifier.add(Convolution2D(32, (3, 3), activation = 'relu'))
+classifier.add(MaxPooling2D(pool_size=(2, 2)))
 # Step 3 - Flattening
 classifier.add(Flatten())
 
@@ -48,12 +51,12 @@ train_datagen = ImageDataGenerator(
 
 test_datagen = ImageDataGenerator(rescale=1./255)
 
-training_set = train_datagen.flow_from_directory('data/training_set',
+training_set = train_datagen.flow_from_directory('dataset/training_set',
                                                  target_size=(64, 64),
                                                  batch_size=32,
                                                  class_mode='binary')
 
-test_set = test_datagen.flow_from_directory('data/test_set',
+test_set = test_datagen.flow_from_directory('dataset/test_set',
                                             target_size=(64, 64),
                                             batch_size=32,
                                             class_mode='binary')
