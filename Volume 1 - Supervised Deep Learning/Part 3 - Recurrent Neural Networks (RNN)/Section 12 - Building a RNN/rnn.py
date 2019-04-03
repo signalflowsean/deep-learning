@@ -15,7 +15,14 @@ import pandas as pd
 
 # Importing the training set
 dataset_train = pd.read_csv('Google_Stock_Price_Train.csv')
-training_set = dataset_train.iloc[:, ]
+# Numpy array of one column
+training_set = dataset_train.iloc[:, 1:2].values
+
+# Two types of Feature Scaling : Standardization, Normalization 
+from sklearn.preprocessing import MinMaxScaler
+sc = MinMaxScaler(feature_range=(0, 1))
+training_set_scaled = sc.fit_transform(training_set)
+
 
 # Part 2 - Building the RNN
 # Part 3 - Making the predictions and vizualizing the results
