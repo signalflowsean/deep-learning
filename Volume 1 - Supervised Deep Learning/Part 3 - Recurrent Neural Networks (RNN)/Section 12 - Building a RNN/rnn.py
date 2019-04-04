@@ -36,6 +36,5 @@ X_train, y_train = np.array(X_train), np.array(y_train)
 # Reshaping
 X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1 ))
 
-
 # Part 2 - Building the RNN
 # Part 3 - Making the predictions and vizualizing the results
