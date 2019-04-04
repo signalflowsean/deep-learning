@@ -86,4 +86,23 @@ regressor.compile(optimizer = 'adam', loss = 'mean_squared_error')
 
 # Fitting the RNN to the Training set
 regressor.fit(X_train, y_train, epochs = 100, batch_size = 32)
+
 # Part 3 - Making the predictions and vizualizing the results
+# Getting the real stock price of 2017 - test set
+dataset_test = pd.read_csv('Google_Stock_Price_Test.csv')
+# Numpy array of one column
+real_stock_price = dataset_test.iloc[:, 1:2].values
+
+# Getting the predicted stock price of 2017
+# training set + test set
+# test set must contain the previous 60 timesteps which are inclued in out train set
+# we just need the open column
+# vertical concat = 0, horizontal concat = 1
+dataset_total = pd.concat((dataset_train['Open'], dataset_test['Open']), axis = 0)
+# need to get the previous prices of test size
+# .values to make a numpy array
+inputs = dataset_total[len(dataset_total) - len(dataset_test) - 60:].values
+# need the reshape the data so its the same as training data
+inputs = inputs.reshape(-1,1)
+
+# Visualizing the results
