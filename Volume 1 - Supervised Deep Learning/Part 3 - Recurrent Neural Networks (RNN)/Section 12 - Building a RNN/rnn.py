@@ -36,5 +36,18 @@ X_train, y_train = np.array(X_train), np.array(y_train)
 # Reshaping
 X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1 ))
 
+# Stacked LSTM with dropout regularization to prevent overfitting
 # Part 2 - Building the RNN
+# nerual network object representing a sequense of layers
+from keras.models import Sequential
+# dense class to add the output layer
+from keras.layers import Dense
+# to add the LSTM layers
+from keras.layers import LSTM
+# to add dropout regularization
+from keras.layers import Dropout
+
+# Initializing the RNN
+# named regressor instead of classifier becuase now we are doing regression (continuous value)
+regressor = Sequential()
 # Part 3 - Making the predictions and vizualizing the results
