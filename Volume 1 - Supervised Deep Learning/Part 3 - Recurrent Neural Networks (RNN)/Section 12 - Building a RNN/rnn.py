@@ -75,4 +75,6 @@ regressor.add(LSTM(units = 50))
 # Dropping out %20 of the neurons (%20 of the neurons with be ignored)
 regressor.add(Dropout(0.2))
 
+regressor.add(Dense(units = 1))
+
 # Part 3 - Making the predictions and vizualizing the results
