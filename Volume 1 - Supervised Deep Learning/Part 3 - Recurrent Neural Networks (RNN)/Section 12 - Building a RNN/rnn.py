@@ -50,4 +50,13 @@ from keras.layers import Dropout
 # Initializing the RNN
 # named regressor instead of classifier becuase now we are doing regression (continuous value)
 regressor = Sequential()
+
+# Adding the first LSTM layer and some Dropout regularization
+# return sequences is true when building a stacked LSTM (multiple layers)
+# input shape is the shape of the inputs we created in X_train (3 dimensions)
+# X_train dimensions 1. batch size, 2. time steps, 3. indicators (we only have to include the last two)
+# We want our model to have a high dimensionality (having a large number of neurons with multiple LSTM layers)
+regressor.add(LSTM(units = 50, return_sequences = True, input_shape = (X_train.shape[1], 1 )))
+# Dropping out %20 of the neurons (%20 of the neurons with be ignored)
+regressor.add(Dropout(0.2))
 # Part 3 - Making the predictions and vizualizing the results
