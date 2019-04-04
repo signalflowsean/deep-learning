@@ -77,8 +77,13 @@ regressor.add(Dropout(0.2))
 
 regressor.add(Dense(units = 1))
 
-#Compiling the RNN
-#RMSprop (stochastic gradient desent optimizer), is recommended by Keras for RNNs
-regress.compile(optimizer = '')
+# Compiling the RNN
+# RMSprop (stochastic gradient desent optimizer), is recommended by Keras for RNNs
+# We are going to use the Adam optimizer
+# Loss for classification is binary cross entropy 
+# Loss for regression is mean squared error
+regressor.compile(optimizer = 'adam', loss = 'mean_squared_error')
 
+# Fitting the RNN to the Training set
+regressor.fit(X_train, y_train, epochs = 100, batch_size = 32)
 # Part 3 - Making the predictions and vizualizing the results
