@@ -77,4 +77,8 @@ regressor.add(Dropout(0.2))
 
 regressor.add(Dense(units = 1))
 
+#Compiling the RNN
+#RMSprop (stochastic gradient desent optimizer), is recommended by Keras for RNNs
+regress.compile(optimizer = '')
+
 # Part 3 - Making the predictions and vizualizing the results
