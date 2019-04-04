@@ -59,4 +59,20 @@ regressor = Sequential()
 regressor.add(LSTM(units = 50, return_sequences = True, input_shape = (X_train.shape[1], 1 )))
 # Dropping out %20 of the neurons (%20 of the neurons with be ignored)
 regressor.add(Dropout(0.2))
+
+#Adding a second LSTM layer and some Dropout regularization
+regressor.add(LSTM(units = 50, return_sequences = True))
+# Dropping out %20 of the neurons (%20 of the neurons with be ignored)
+regressor.add(Dropout(0.2))
+
+#Adding a third LSTM layer and some Dropout regularization
+regressor.add(LSTM(units = 50, return_sequences = True))
+# Dropping out %20 of the neurons (%20 of the neurons with be ignored)
+regressor.add(Dropout(0.2))
+
+#Adding a fourth LSTM layer and some Dropout regulariztion
+regressor.add(LSTM(units = 50))
+# Dropping out %20 of the neurons (%20 of the neurons with be ignored)
+regressor.add(Dropout(0.2))
+
 # Part 3 - Making the predictions and vizualizing the results
